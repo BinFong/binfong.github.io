@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Vue-CLI3 导入全局样式文件发生了什么 - BinFong 的博客 | BinFong&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> 真正修行人，不讥世间过。 </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>BinFong</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chainWebpack-选项"><span class="toc-text">chainWebpack 选项</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> 真正修行人，不讥世间过。 </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Vue-CLI3 导入全局样式文件发生了什么
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018/10/28 16:20:20</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#技术" title="技术">技术</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#Vue" title="Vue">Vue</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#Vue-CLI" title="Vue-CLI">Vue-CLI</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content ">
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​    在基于Vue 项目的开发过程中，有时候需要引用一些全局文件（定义了样式变量、方法等），这么做是为了增加复用性，提高开发和多人协作的效率。如果是小型或者引用数量比较少的项目，这种全局文件可以直接进行引用；但是在大型项目中，如果每一个需要到的地方都要 <em>import</em> 一次，无疑会增加项目的耦合程度，一旦全局文件的维护者更改了文件名或路径，那便会产生灾难性的影响，影响面非常广。</p>
+<p>​    对于大型的项目，我们还是希望关注点分离，让开发业务代码的同学只关心调用。Vue-CLI3 生成的项目中，官方在文档中提供了几种通过修改 <em>Webpack Loader</em> 配置引入全局文件的方法，分别为：</p>
+<ul>
+<li><p>通过 chainWebpack 选项（style-resources-loader）；</p>
+</li>
+<li><p>通过 Vue-CLI Plugin（vue-cli-plugin-style-resources-loader）；</p>
+</li>
+<li><p>通过 css.loaderOptions 选项；</p>
+<p>下面我们以 SCSS 为例，介绍下这几种引入方法；同时以源码的角度，看看导入全局样式文件后，脚手架内部发生了什么。</p>
+</li>
+</ul>
+<h3 id="chainWebpack-选项"><a href="#chainWebpack-选项" class="headerlink" title="chainWebpack 选项"></a>chainWebpack 选项</h3><p>​    <em>vue.config.js</em> 中提供了直接修改 Webpack 配置的选项，主要是通过 <a href="https://github.com/neutrinojs/webpack-chain" target="_blank" rel="noopener">webpack-chain</a> 这个库实现的，它提供了抽象化的链式调用方法并生成配置，可以通过该选项，向预处理器 Loader 导入全局文件。这里主要是通过 <a href="https://github.com/yenshih/style-resources-loader" target="_blank" rel="noopener">style-resources-loader</a> 的 options.patterns 选项，向 Webpack 传递全局文件，先看一段示例代码：</p>
+<p>​    <img src="/2018/10/28/Vue-CLI3%20导入全局样式文件发生了什么/1.jpg"></p>
+<p>​     Vue-CLI3 中样式相关配置的生成，主要位于 <em>@vue/cli-service/lib/config/css.js</em> 中，该文件的作用主要是生成样式相关的配置，并在 <em>@vue/cli-service/lib/Service.js</em> 中被调用，以下是部分关键源码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createCSSRule</span> (<span class="params">lang, test, loader, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> baseRule = webpackConfig.module.rule(lang).test(test)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// rules for &lt;style lang="module"&gt;</span></span><br><span class="line">  <span class="keyword">const</span> vueModulesRule = baseRule.oneOf(<span class="string">'vue-modules'</span>).resourceQuery(<span class="regexp">/module/</span>)</span><br><span class="line">  applyLoaders(vueModulesRule, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// rules for &lt;style&gt;</span></span><br><span class="line">  <span class="keyword">const</span> vueNormalRule = baseRule.oneOf(<span class="string">'vue'</span>).resourceQuery(<span class="regexp">/\?vue/</span>)</span><br><span class="line">  applyLoaders(vueNormalRule, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// rules for *.module.* files</span></span><br><span class="line">  <span class="keyword">const</span> extModulesRule = baseRule.oneOf(<span class="string">'normal-modules'</span>).test(<span class="regexp">/\.module\.\w+$/</span>)</span><br><span class="line">  applyLoaders(extModulesRule, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// rules for normal CSS imports</span></span><br><span class="line">  <span class="keyword">const</span> normalRule = baseRule.oneOf(<span class="string">'normal'</span>)</span><br><span class="line">  applyLoaders(normalRule, modules)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">applyLoaders</span> (<span class="params">rule, modules</span>) </span>&#123;</span><br><span class="line">  	...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">createCSSRule(<span class="string">'css'</span>, /\.css$/)</span><br><span class="line">  </span><br><span class="line">createCSSRule(<span class="string">'postcss'</span>, /\.p(ost)?css$/)</span><br><span class="line">  </span><br><span class="line">createCSSRule(<span class="string">'scss'</span>, /\.scss$/, <span class="string">'sass-loader'</span>, loaderOptions.sass)</span><br><span class="line">  </span><br><span class="line">createCSSRule(<span class="string">'sass'</span>, /\.sass$/, <span class="string">'sass-loader'</span>, <span class="built_in">Object</span>.assign(&#123;</span><br><span class="line">	indentedSyntax: <span class="literal">true</span></span><br><span class="line">&#125;, loaderOptions.sass))</span><br><span class="line">  </span><br><span class="line">createCSSRule(<span class="string">'less'</span>, /\.less$/, <span class="string">'less-loader'</span>, loaderOptions.less)</span><br><span class="line">  </span><br><span class="line">createCSSRule(<span class="string">'stylus'</span>, /\.styl(us)?$/, <span class="string">'stylus-loader'</span>, <span class="built_in">Object</span>.assign(&#123;</span><br><span class="line">	preferPathResolver: <span class="string">'webpack'</span></span><br><span class="line">&#125;, loaderOptions.stylus))</span><br></pre></td></tr></table></figure>
+<p>​    在该文件中，CSS 相关的规则会先在 createCSSRule 这个方法被生成，它支持传入四个参数，分别为：1. 创建的规则名；2. 匹配特定的正则；3.  使用的自定义 Loader；4. 对应的Loader 配置。</p>
+<p>​    在函数内部，上文提到的 <em>vue-modules、vue、normal-modules、normal</em> 四种嵌套的匹配规则，则是对应了几种样式被引用的方式，这里使用的是 Rule.oneOf 这个 API ，所以匹配的优先级是从上往下降级；在规则被创建完以后，则会调用 applyLoaders 这个方法，我们对其简单地解析下（省略部分逻辑）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyLoaders</span> (<span class="params">rule, modules</span>) </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 是否提取 CSS，shouldExtract 变量在函数外部被定义</span></span><br><span class="line">  <span class="comment">// 默认只在生产环境下使用 CSS 提取，这将便于你在开发环境下进行热重载</span></span><br><span class="line">  <span class="keyword">if</span> (shouldExtract) &#123;</span><br><span class="line">    rule</span><br><span class="line">      .use(<span class="string">'extract-css-loader'</span>).loader(<span class="built_in">require</span>(<span class="string">'mini-css-extract-plugin'</span>).loader)</span><br><span class="line">      .options(&#123;</span><br><span class="line">        publicPath: cssPublicPath</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    rule.use(<span class="string">'vue-style-loader'</span>).loader(<span class="string">'vue-style-loader'</span>).options(&#123;</span><br><span class="line">      sourceMap,</span><br><span class="line">      shadowMode</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// loaderOptions 来源于 vue.config.js 中的 css.loaderOptions 选项</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 定义传递给 css-loader 的选项</span></span><br><span class="line">  <span class="keyword">const</span> cssLoaderOptions = <span class="built_in">Object</span>.assign(&#123;</span><br><span class="line">    sourceMap,</span><br><span class="line">    importLoaders: (</span><br><span class="line">      <span class="number">1</span> + <span class="comment">// stylePostLoader injected by vue-loader</span></span><br><span class="line">      (hasPostCSSConfig ? <span class="number">1</span> : <span class="number">0</span>) +</span><br><span class="line">      (needInlineMinification ? <span class="number">1</span> : <span class="number">0</span>)</span><br><span class="line">    )</span><br><span class="line">  &#125;, loaderOptions.css)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 是否使用 CSS Modules，默认是不使用</span></span><br><span class="line">  <span class="comment">// loaderOptions.css 中若有传入该选项，localIdentName、modules 在这里会被自定义</span></span><br><span class="line">  <span class="keyword">if</span> (modules) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      localIdentName = <span class="string">'[name]_[local]_[hash:base64:5]'</span></span><br><span class="line">    &#125; = loaderOptions.css || &#123;&#125;</span><br><span class="line">    <span class="built_in">Object</span>.assign(cssLoaderOptions, &#123;</span><br><span class="line">      modules,</span><br><span class="line">      localIdentName</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用 CSS Loader，传递合并后的配置选项</span></span><br><span class="line">  rule.use(<span class="string">'css-loader'</span>).loader(<span class="string">'css-loader'</span>).options(cssLoaderOptions)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 这一步的目的是为了确保构建生产版本时，配置项选择不提取CSS时也能被优化</span></span><br><span class="line">  <span class="keyword">if</span> (needInlineMinification) &#123;</span><br><span class="line">    <span class="comment">// cssnano 是 PostCSS 的CSS优化和分解插件</span></span><br><span class="line">    rule.use(<span class="string">'cssnano'</span>).loader(<span class="string">'postcss-loader'</span>).options(&#123;</span><br><span class="line">      sourceMap,</span><br><span class="line">      plugins: [<span class="built_in">require</span>(<span class="string">'cssnano'</span>)(cssnanoOptions)]</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 检查项目是否有 Postcss 配置</span></span><br><span class="line">  <span class="keyword">if</span> (hasPostCSSConfig) &#123;</span><br><span class="line">    rule.use(<span class="string">'postcss-loader'</span>).loader(<span class="string">'postcss-loader'</span>).options(<span class="built_in">Object</span>.assign(&#123; 		</span><br><span class="line">      sourceMap</span><br><span class="line">    &#125;, loaderOptions.postcss))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 预处理区相关的设置会运用在此</span></span><br><span class="line">  <span class="comment">// 如: createCSSRule('scss', /\.scss$/, 'sass-loader', loaderOptions.sass)</span></span><br><span class="line">  <span class="keyword">if</span> (loader) &#123;</span><br><span class="line">    rule.use(loader).loader(loader).options(<span class="built_in">Object</span>.assign(&#123; sourceMap &#125;, options))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    在 CSS Modules 相关的配置中，只有在 vue.config.js 中将 css.modules 设置为 true，或者按照 Vue-CLI 约定的方式进行引入才会被开启。</p>
+<p>​    可以看到，createCSSRule 方法已经将大部分关于样式的规则预先创建好，其内部 applyLoaders 方法则会对配置项进行创建与合并，并传递至对应的 Loader。</p>
+<p>​    把代码加上注释便于理解：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">  	<span class="comment">// 定义四类需要需要匹配的规则</span></span><br><span class="line">    <span class="keyword">const</span> types = [<span class="string">'vue-modules'</span>, <span class="string">'vue'</span>, <span class="string">'normal-modules'</span>, <span class="string">'normal'</span>]</span><br><span class="line">    types.forEach(<span class="function"><span class="params">type</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// module.rule 可以用来匹配并配置 Loader</span></span><br><span class="line">      config.module.rule(<span class="string">'scss'</span>)</span><br><span class="line">      	<span class="comment">// oneOf 用于指定嵌套规则并匹配一次</span></span><br><span class="line">        .oneOf(type)</span><br><span class="line">      	<span class="comment">// 创建规则</span></span><br><span class="line">        .use(<span class="string">'style-resource'</span>).loader(<span class="string">'style-resources-loader'</span>)</span><br><span class="line">      	<span class="comment">// 传递选项参数，详细配置请查阅 style-resources-loader 文档</span></span><br><span class="line">        .options(&#123;</span><br><span class="line">          patterns: [</span><br><span class="line">            path.resolve(__dirname, <span class="string">'src/style/variables/*.scss'</span>)</span><br><span class="line">          ]</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    解析下这段代码，我们的需求是对 SCSS 的规则里，添加 style-resources-loader ，所以需要找到生成默认配置的。这段例子具有很多有意思的地方，先从审查命令说起：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue inspect <span class="class"><span class="keyword">module</span>.<span class="title">rules</span> &gt; <span class="title">output</span>.<span class="title">js</span></span></span><br></pre></td></tr></table></figure>
+<p>​    通过该命令，可以方便地将 <strong><em>解析出来的 webpack 配置、包括链式访问规则和插件</em></strong> 的提示重定向到 output.js 文件，而这里我们只需要查看 Rules。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// output.js</span></span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">  <span class="comment">/* config.module.rule('scss') */</span></span><br><span class="line">  &#123;</span><br><span class="line">    test: <span class="regexp">/\.scss$/</span>,</span><br><span class="line">    oneOf: [</span><br><span class="line">      <span class="comment">/* config.module.rule('scss').oneOf('vue-modules') */</span></span><br><span class="line">      &#123;</span><br><span class="line">        resourceQuery: <span class="regexp">/module/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('vue-style-loader') */</span></span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'vue-style-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              ...</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('css-loader') */</span></span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'css-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              ...</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('postcss-loader') */</span></span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'postcss-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              ...</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('sass-loader') */</span></span><br><span class="line">          &#123;</span><br><span class="line">            loader: <span class="string">'sass-loader'</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              ...</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">/* config.module.rule('scss').oneOf('vue') */</span></span><br><span class="line">      &#123;...&#125;,</span><br><span class="line">      <span class="comment">/* config.module.rule('scss').oneOf('normal-modules') */</span></span><br><span class="line">      &#123;...&#125;,</span><br><span class="line">      <span class="comment">/* config.module.rule('scss').oneOf('normal') */</span></span><br><span class="line">      &#123;...&#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    在脚手架默认配置，对 SCSS 的处理规则里会对 <em>vue-modules、vue、normal-modules、normal</em> 四种类型依次进行规则匹配，当规则匹配时只使用第一个匹配规则。在每一个嵌套的匹配规则中，再依次使用 <em>vue-style-loader、css-loader、postcss-loader、sass-loader</em> 等 Loader。</p>
+<p>​    将示例代码引入后，再次审查配置，应该会在发现在 <em>use</em> 选项的队列中，新增了一个 Loader:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* config.module.rule('scss') */</span></span><br><span class="line">&#123;</span><br><span class="line">	test: <span class="regexp">/\.scss$/</span>,</span><br><span class="line">  oneOf: [</span><br><span class="line">    <span class="comment">/* config.module.rule('scss').oneOf('vue-modules') */</span></span><br><span class="line">    &#123;</span><br><span class="line">    	resourceQuery: <span class="regexp">/module/</span>,</span><br><span class="line">      use: [</span><br><span class="line">        <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('vue-style-loader') */</span></span><br><span class="line">        &#123;...&#125;,</span><br><span class="line">        <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('css-loader') */</span></span><br><span class="line">        &#123;...&#125;,</span><br><span class="line">        <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('postcss-loader') */</span></span><br><span class="line">        &#123;...&#125;,</span><br><span class="line">        <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('sass-loader') */</span></span><br><span class="line">        &#123;...&#125;,</span><br><span class="line">        <span class="comment">/* 新增的配置 */</span></span><br><span class="line">        <span class="comment">/* config.module.rule('scss').oneOf('vue-modules').use('style-resource') */</span></span><br><span class="line">        &#123;</span><br><span class="line">          loader: <span class="string">'style-resources-loader'</span>,</span><br><span class="line">          options: &#123;...&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    官方文档中，同时还提到了  <a href="https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader" target="_blank" rel="noopener">vue-cli-plugin-style-resources-loader</a> ，这是一个标准的 Vue-CLI3 插件。</p>
+<p>但是在官方文档中，这种方式配置却是不被推荐的。chainWebpack 选项提供了细颗粒度修改配置的方式，但是对于样式的规则来说，本身默认生成的嵌套规则就已经达到了 4*3 种，通过以上这种方式无疑会增加了配置的复杂度、耦合度，容易造成疏漏、非常不利于维护：</p>
+<blockquote>
+<p>对于 CSS 相关 loader 来说，我们推荐使用 css.loaderOptions 而不是直接链式指定 loader。这是因为每种 CSS 文件类型都有多个规则，而 css.loaderOptions 可以确保你通过一个地方影响所有的规则。</p>
+</blockquote>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/BinFong">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+</html>
